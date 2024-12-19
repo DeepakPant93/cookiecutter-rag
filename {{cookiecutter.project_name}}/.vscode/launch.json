@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: {{cookiecutter.project_slug}}",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/{{cookiecutter.project_slug}}/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "jinja": true
+        }
+    ]
+}

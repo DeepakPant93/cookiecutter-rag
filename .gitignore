@@ -166,7 +166,7 @@ cython_debug/
 .idea/
 
 # Exclude vscode config files
-.vscode/
+# .vscode/
 
 # Exclude .DS_Store files from being added
 .DS_Store
