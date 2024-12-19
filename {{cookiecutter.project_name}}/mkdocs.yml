@@ -1,0 +1,89 @@
+site_name: {{cookiecutter.project_name}}
+repo_url: https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}
+site_url: https://{{cookiecutter.author_github_handle}}.github.io/{{cookiecutter.project_name}}
+site_description: {{cookiecutter.project_description}}
+site_author: {{cookiecutter.author}}
+edit_uri: edit/main/docs/
+repo_name: {{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}
+copyright: Maintained by <a href="https://github.com/{{cookiecutter.author_github_handle}}/">{{cookiecutter.author}}</a>.
+
+nav:
+    - Home: index.md
+    - Modules: modules.md
+
+plugins:
+    - search
+    - tags
+    - mkdocstrings:
+          handlers:
+              python:
+                  setup_commands:
+                      show_source: false
+                      show_root_heading: true
+                      show_root_full_path: false
+                      heading_level: 3
+                      enable_inventory: true
+                      # - import sys
+                      # - sys.path.append('../')
+    # - git-revision-date-localized:  # Shows last updated date
+    #     enable_creation_date: true
+    - minify: # Minifies HTML and JS
+          minify_html: true
+          minify_js: true
+
+theme:
+    name: material
+    logo: assets/logo.png # Optional custom logo
+    favicon: assets/favicon.ico # Optional favicon
+    features:
+        - navigation.tabs # Top-level sections as tabs
+        - navigation.sections # Sections are expanded
+        - navigation.top # Back to top button
+        - search.suggest # Search suggestions
+        - search.highlight # Highlight search results
+        - content.tabs.link # Link code tabs
+        - content.code.annotate # Code block annotations
+        - content.copy.code # Copy code button
+    palette:
+        - media: "(prefers-color-scheme: light)"
+          scheme: default
+          primary: indigo
+          accent: deep orange
+          toggle:
+              icon: material/brightness-7
+              name: Switch to dark mode
+        - media: "(prefers-color-scheme: dark)"
+          scheme: slate
+          primary: black
+          accent: deep orange
+          toggle:
+              icon: material/brightness-4
+              name: Switch to light mode
+    icon:
+        repo: fontawesome/brands/github
+
+extra:
+    social:
+        - icon: fontawesome/brands/github
+          link: https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}
+        - icon: fontawesome/brands/python
+          link: https://pypi.org/project/{{cookiecutter.project_name}}
+    # analytics:  # Optional Google Analytics
+    #   provider: google
+    #   property: G-XXXXXXXXXX  # Replace with your tracking ID
+
+markdown_extensions:
+    - toc:
+          permalink: true
+    - pymdownx.arithmatex:
+          generic: true
+    - pymdownx.highlight: # Advanced code highlighting
+          anchor_linenums: true
+          line_spans: __span
+          pygments_lang_class: true
+    - pymdownx.inlinehilite
+    - pymdownx.snippets
+    - pymdownx.superfences
+    - pymdownx.tabbed
+    - attr_list
+    - md_in_html
