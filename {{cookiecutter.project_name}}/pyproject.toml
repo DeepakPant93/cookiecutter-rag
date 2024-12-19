@@ -1,0 +1,205 @@
+[tool.poetry]
+name = "{{cookiecutter.project_slug}}"
+version = "0.0.1"
+description = "{{cookiecutter.project_description}}"
+authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
+repository = "https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}"
+documentation = "https://{{cookiecutter.author_github_handle}}.github.io/{{cookiecutter.project_name}}/"
+readme = "README.md"
+packages = [
+  {include = "{{cookiecutter.project_slug}}"}
+]
+
+[tool.poetry.scripts]
+{{cookiecutter.project_slug}} = "{{cookiecutter.project_slug}}.main:main"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<4.0"
+fastapi = "~0.100.0"  # Latest compatible version
+uvicorn = "^0.23.0"  # For running FastAPI apps
+fastapi-health = "^0.4.0"  # Health check for FastAPI
+#pyyaml = "^6.0.2"
+#python-box = "^7.2.0"
+#ensure = "^1.0.4"
+#joblib = "^1.3.2"  # Parallel processing and caching
+#python-dotenv = "^1.0.0"  # Manage environment variables
+#PyPDF2 = "^3.0.0"  # For PDF manipulation
+#pydantic = "^2.0.0"  # Data validation and settings management
+
+
+
+[tool.poetry.group.dev.dependencies]
+deptry = "^0.16.2"  # For dependency management
+mypy = "^1.5.1"  # Static type checking
+pre-commit = "^3.4.0"  # Pre-commit hooks
+tox = "^4.11.1"  # Testing in multiple environments
+ipykernel = "^6.25.0"  # Jupyter kernel
+black = "^23.9.0"  # Code formatter
+build = "^1.0.0"  # Build management
+bump-my-version = "^0.28.2"  # Bump versions automatically
+codespell = "^2.2.5"  # Spell checking in code
+wheel = "^0.41.0"  # Build wheels
+twine = "^4.0.0"  # Publish packages
+pytest-runner = "^6.0.0"  # Running tests via `python setup.py test`
+
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.5.0"  # Documentation site generator
+sphinx = "^7.2.0"  # Documentation tool
+mkdocs-git-revision-date-plugin = "^0.3.2"  # Show revision dates
+mkdocs-git-revision-date-localized-plugin = "^1.3.0"  # Localized dates
+mkdocs-jupyter = ">=0.25.1"  # For Jupyter Notebook integration
+mkdocs-pdf-export-plugin = "^0.5.10"  # PDF export
+mkdocs-material = ">=9.1.3"  # MkDocs Material theme
+mkdocstrings-crystal = "^0.3.0"  # Mkdocstrings for Crystal
+pygments = "^2.16.0"  # Syntax highlighting
+pymdown-extensions = "^10.0"  # Markdown extensions
+nbconvert = "^7.7.0"  # Convert notebooks to other formats
+nbformat = "^5.9.0"  # Notebook format support
+livereload = "^2.6.3"  # Live reload for MkDocs
+watchdog = "^3.0.0"  # File monitoring
+mkdocstrings = {extras = ["python"], version = "^0.27.0"}  # Auto-generate documentation from docstrings
+mkdocs-minify-plugin = "^0.8.0"  # Minify HTML
+
+[tool.poetry.group.test.dependencies]
+pytest-mock = "^3.11.0"  # Mocking in tests
+factory-boy = "^3.3.1"  # Test data generation
+pytest-asyncio = "^0.21.0"  # Async testing support
+pytest-xdist = "^3.3.1"  # Parallel test execution
+freezegun = "^1.2.0"  # Mock datetime
+pytest = "^7.2.0"  # Testing framework
+allure-pytest = "^2.13.0"  # Reporting for pytest
+pytest-sugar = "^0.9.7"  # Better test output
+pytest-cov = "^4.0.0"  # Test coverage reports
+httpx = "^0.24.0"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.mypy]
+files = ["{{cookiecutter.project_slug}}"]
+disallow_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+check_untyped_defs = true
+warn_return_any = true
+warn_unused_ignores = true
+show_error_codes = true
+pretty = true
+show_traceback = true
+
+
+[[tool.mypy.overrides]]
+module = [
+    "joblib.*",
+    "yaml.*",
+    "ensure.*",
+    "{{cookiecutter.project_slug}}.main"
+]
+ignore_missing_imports = true
+ignore_errors = true
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = "legacy_tests"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+filterwarnings = [
+    "ignore:.*general_plain_validator_function.*:DeprecationWarning",
+    "ignore:.*with_info_plain_validator_function.*:DeprecationWarning"
+]
+
+
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+fix = true
+select = [
+    # flake8-2020
+    "YTT",
+    # flake8-bandit
+    "S",
+    # flake8-bugbear
+    "B",
+    # flake8-builtins
+    "A",
+    # flake8-comprehensions
+    "C4",
+    # flake8-debugger
+    "T10",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # mccabe
+    "C90",
+    # pycodestyle
+    "E", "W",
+    # pyflakes
+    "F",
+    # pygrep-hooks
+    "PGH",
+    # pyupgrade
+    "UP",
+    # ruff
+    "RUF",
+    # tryceratops
+    "TRY",
+]
+ignore = [
+    # LineTooLong
+    "E501",
+    # DoNotAssignLambda
+    "E731",
+    # Possible binding to all interfaces - Require for Docker container
+    "S104"
+]
+
+[tool.ruff.format]
+preview = true
+
+[tool.coverage.report]
+skip_empty = true
+
+
+[tool.coverage.run]
+branch = true
+source = ["{{cookiecutter.project_slug}}"]
+# parallel = true
+# concurrency = ["thread"]
+omit = [
+    "**/__init__.py", # Exclude all init files
+    "{{cookiecutter.project_slug}}/main.py",  # Exclude main.py file
+    "{{cookiecutter.project_slug}}/constants/*",   # Exclude all files in a constants folder
+    "{{cookiecutter.project_slug}}/exception/*",   # Exclude all files in a exception folder
+    "{{cookiecutter.project_slug}}/logger/*",  # Exclude all files in a logger folder
+    "{{cookiecutter.project_slug}}/entity/*",  # Exclude all files in entity folder
+    "{{cookiecutter.project_slug}}/config/*",  # Exclude all files in config folder
+    "{{cookiecutter.project_slug}}/models/*",  # Exclude all files in model folder
+]
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.bumpversion]
+current_version = "0.0.1"
+commit = true
+tag = true
+
+[[tool.bumpversion.files]]
+glob = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+glob = "{{cookiecutter.project_slug}}/main.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+[tool.deptry]
+exclude = ["research", "tests", "docs", ".venv", "venv", "__pycache__", ".ruff_cache", ".pytest_cache", ".mypy_cache", ".coverage", ".git", "build", "dist", ".github", "site", "config"]

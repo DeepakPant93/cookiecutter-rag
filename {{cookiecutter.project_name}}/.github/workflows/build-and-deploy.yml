@@ -1,0 +1,55 @@
+name: Build and Deploy Docker Image
+
+on:
+  workflow_dispatch: {}
+  release:
+      types: [published]
+      branches: [main]
+  repository_dispatch:
+      types: [package-release]
+
+env:
+    DOCKER_IMAGE: {{cookiecutter.dockerhub_username}}/{{cookiecutter.project_slug}} # Replace with your DockerHub image
+    AZURE_WEBAPP_NAME: {{cookiecutter.project_name}}-app # Replace with your Azure Web App name
+    AZURE_WEBAPP_RG: {{cookiecutter.project_name}}-rg # Replace with your Azure Web App resource group
+
+jobs:
+    build-push-docker-image:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Login to Docker Hub
+              env:
+                  DOCKER_USER: {{cookiecutter.dockerhub_username}}
+                  DOCKER_PWD: {% raw %}${{ secrets.DOCKERHUB_PUSH_TOKEN }}{% endraw %}
+              run: echo $DOCKER_PWD | docker login -u $DOCKER_USER --password-stdin
+
+            - name: Build and Push Docker Image
+              run: {% raw %}make bake-container-and-push IMAGE=${{ env.DOCKER_IMAGE }} TAG=${{ github.sha }}{% endraw %}
+
+            - name: Clean up Docker system
+              run: docker system prune -f
+
+    deploy:
+        runs-on: ubuntu-latest
+        needs: build-push-docker-image
+        environment:
+            name: "production"
+
+        steps:
+            - name: Azure Login
+              uses: azure/login@v1
+              with:
+                  creds: {% raw %}${{ secrets.AZURE_CREDENTIALS }}{% endraw %}
+
+            - name: Deploy to Azure Container Apps
+              run: |
+                  az containerapp update \
+                    --name {% raw %}${{ env.AZURE_WEBAPP_NAME }}{% endraw %} \
+                    --resource-group {% raw %}${{ env.AZURE_WEBAPP_RG }}{% endraw %} \
+                    --image {% raw %}index.docker.io/${{ env.DOCKER_IMAGE }}:${{ github.sha }}{% endraw %} \
+                    --query "properties.configuration.ingress.fqdn" \
+                    -o tsv

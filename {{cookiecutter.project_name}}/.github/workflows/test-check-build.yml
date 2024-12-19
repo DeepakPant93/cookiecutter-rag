@@ -1,0 +1,91 @@
+name: Test, check and build pipeline
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+    quality:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out
+              uses: actions/checkout@v4
+
+            - uses: actions/cache@v4
+              with:
+                  path: ~/.cache/pre-commit
+                  key: {% raw %}pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}{% endraw %}
+
+            - name: Set up the environment
+              uses: ./.github/actions/setup-poetry-env
+
+            - name: Run checks
+              run: make lint
+
+    tests:
+        runs-on: ubuntu-latest
+        needs: quality
+        strategy:
+            matrix:
+                python-version: ["3.12"]
+            fail-fast: false
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - name: Check out
+              uses: actions/checkout@v4
+
+            - name: Set up the environment
+              uses: ./.github/actions/setup-poetry-env
+              with:
+                  python-version: {% raw %}${{ matrix.python-version }}{% endraw %}
+
+            - name: Run tests
+              run: poetry run pytest tests --cov --cov-config=pyproject.toml --cov-report=xml
+
+            - name: Check typing
+              run: poetry run mypy
+
+            - name: Upload coverage reports to Codecov with GitHub Action on Python 3.12
+              uses: codecov/codecov-action@v5
+              with:
+                  token: {% raw %}${{ secrets.CODECOV_TOKEN }}{% endraw %}
+              if: {% raw %}${{ matrix.python-version == '3.12' }}{% endraw %}
+
+    build:
+        runs-on: ubuntu-latest
+        needs: tests
+        strategy:
+            matrix:
+                python-version: ["3.12"]
+            fail-fast: false
+        defaults:
+            run:
+                shell: bash
+        steps:
+            - name: Check out
+              uses: actions/checkout@v4
+
+            - name: Set up the environment
+              uses: ./.github/actions/setup-poetry-env
+              with:
+                  python-version: {% raw %}${{ matrix.python-version }}{% endraw %}
+
+            - name: Build
+              run: make bake
+
+    check-docs:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out
+              uses: actions/checkout@v4
+
+            - name: Set up the environment
+              uses: ./.github/actions/setup-poetry-env
+
+            - name: Check if documentation can be built
+              run: poetry run mkdocs build -s

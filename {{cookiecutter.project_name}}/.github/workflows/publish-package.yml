@@ -1,0 +1,41 @@
+name: Publish Package
+
+on:
+  release:
+      types: [published]
+      branches: [main]
+  repository_dispatch:
+      types: [package-release]
+
+
+jobs:
+    publish-to-pypi:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check out
+              uses: actions/checkout@v4
+
+            - name: Set up the environment
+              uses: ./.github/actions/setup-poetry-env
+
+            - name: Export tag
+              id: vars
+              run: |
+                  {% raw %}if [ "${{ github.event.client_payload.version }}" != "" ]; then
+                    echo "tag=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
+                  elif [ "${{ github.event.inputs.version }}" != "" ]; then
+                    echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+                  else
+                    echo "No version provided"
+                    exit 1
+                  fi{% endraw %}
+
+            - name: Build and publish
+              run: |
+                  source .venv/bin/activate
+                  poetry version $RELEASE_VERSION
+                  make bake-and-publish
+              env:
+                  PYPI_TOKEN: {% raw %}${{ secrets.PYPI_TOKEN }}{% endraw %}
+                  RELEASE_VERSION: {% raw %}${{ steps.vars.outputs.tag }}{% endraw %}

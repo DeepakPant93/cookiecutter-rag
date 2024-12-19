@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  {{cookiecutter.project_slug}}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: {{cookiecutter.project_slug}}
+    ports:
+      - "{{cookiecutter.app_host_port}}:{{cookiecutter.app_host_port}}"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:{{cookiecutter.app_host_port}}/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    command: >
+      {{cookiecutter.project_slug}}
