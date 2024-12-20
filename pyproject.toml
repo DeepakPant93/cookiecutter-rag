@@ -1,12 +1,13 @@
 [tool.poetry]
 name = "cookiecutter-rag"
-version = "0.0.4"
+version = "0.0.5"
 description = "A python cookiecutter application to create a new python project for GenAI RAG application that uses poetry to manage its dependencies."
 authors = ["Deepak Pant <DeepakPant93@gmail.com>"]
 repository = "https://github.com/DeepakPant93/cookiecutter-rag"
 documentation = "https://DeepakPant93.github.io/cookiecutter-rag/"
 readme = "README.md"
 keywords = ['cookiecutter', 'template', 'poetry']
+license = "MIT" 
 packages = [
   {include = "cookiecutter_poetry"}
 ]
