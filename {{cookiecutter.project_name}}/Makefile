@@ -124,6 +124,9 @@ lint: ## Run code quality tools
 	@poetry run mypy
 	@echo "🚀 Checking for obsolete dependencies with deptry"
 	@poetry run deptry .
+	@echo "🚀 Checking for security vulnerabilities with bandit"
+	@poetry run bandit -c pyproject.toml -r {{cookiecutter.project_slug}}/ -ll
+
 
 .PHONY: test
 test: ## Run tests with pytest

@@ -51,7 +51,7 @@ app.openapi = custom_openapi
 def main():
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port={{cookiecutter.app_host_port}})
+    uvicorn.run(app, host="0.0.0.0", port={{cookiecutter.app_host_port}})   # nosec B104
 
 
 if __name__ == "__main__":
