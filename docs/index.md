@@ -42,13 +42,14 @@ First, navigate to the directory where you want to create the project and run:
 
 ```bash
 pip install cookiecutter-rag
+cc_rag
 ```
 
 Alternatively, you can install **cookiecutter** and use the GitHub repository URL directly:
 
 ```bash
 pip install cookiecutter
-cookiecutter git@github.com:DeepakPant93/cookiecutter-poetry.git
+cookiecutter git@github.com:DeepakPant93/cookiecutter-rag.git
 ```
 
 ### Step 2: Create a GitHub Repository

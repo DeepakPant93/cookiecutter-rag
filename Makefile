@@ -7,8 +7,8 @@ bake-with-inputs: ## bake with inputs and overwrite if exists.
 	@cookiecutter . --overwrite-if-exists
 
 .PHONY: bake-and-test-deploy
-bake-and-test-deploy: ## For quick publishing to cookiecutter-poetry-example to test GH Actions
-	@rm -rf cookiecutter-poetry-example || true
+bake-and-test-deploy: ## For quick publishing to cookiecutter-rag-example to test GH Actions
+	@rm -rf cookiecutter-rag-example || true
 	@cookiecutter --no-input . --overwrite-if-exists \
 		author="Deepak Pant" \
 		email="deepak.93p@gmail.com" \
@@ -24,7 +24,7 @@ bake-and-test-deploy: ## For quick publishing to cookiecutter-poetry-example to 
 		poetry run pre-commit run -a || true && \
 		git add . && \
 		git commit -m "init commit" && \
-		git remote add origin git@github.com:fpgmaas/cookiecutter-poetry-example.git && \
+		git remote add origin git@github.com:fpgmaas/cookiecutter-rag-example.git && \
 		git push -f origin main
 
 

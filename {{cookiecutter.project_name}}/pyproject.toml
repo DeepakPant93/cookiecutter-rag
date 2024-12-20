@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "{{cookiecutter.project_slug}}"
-version = "0.0.1"
+version = "0.0.2"
 description = "{{cookiecutter.project_description}}"
 authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
 repository = "https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}"
@@ -41,7 +41,9 @@ codespell = "^2.2.5"  # Spell checking in code
 wheel = "^0.41.0"  # Build wheels
 twine = "^4.0.0"  # Publish packages
 bandit = "^1.8.0"  # Security check
-
+pylint = "^3.0.0"  # Powerful linter
+pydocstyle = "^6.3.0"  # Enforce PEP 257 docstring conventions
+isort = "^5.12.0"  # Sort imports
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.5.0"  # Documentation site generator
@@ -98,6 +100,7 @@ module = [
     "joblib.*",
     "yaml.*",
     "ensure.*",
+    "fastapi_health.*",
     "{{cookiecutter.project_slug}}.main"
 ]
 ignore_missing_imports = true

@@ -49,6 +49,8 @@ from fastapi import HTTPException
 
 
 class CustomException(HTTPException):
+    """Custom exception class for handling errors in the data science pipeline."""
+
     def __init__(self, status_code: int, detail: str):
         """
         Custom exception for handling API errors.
