@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "{{cookiecutter.project_slug}}"
-version = "0.0.2"
+version = "0.0.1"
 description = "{{cookiecutter.project_description}}"
 authors = ["{{cookiecutter.author}} <{{cookiecutter.email}}>"]
 repository = "https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}"
@@ -206,4 +206,7 @@ search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'
 
 [tool.deptry]
-exclude = ["research", "tests", "docs", ".venv", "venv", "__pycache__", ".ruff_cache", ".pytest_cache", ".mypy_cache", ".coverage", ".git", "build", "dist", ".github", "site", "config"]
+exclude = ["research","artifacts", "notebooks", "tests", "docs", ".venv", "venv", "__pycache__", ".ruff_cache", ".pytest_cache", ".mypy_cache", ".coverage", ".git", "build", "dist", ".github", "site", "config"]
+
+[tool.pydocstyle]
+select = ["D101", "D102"]
